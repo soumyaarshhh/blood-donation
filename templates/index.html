@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LifeDrop – Blood Donation</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --red: #C8102E;
+      --red-dark: #9b0c22;
+      --red-light: #fde8ec;
+      --cream: #FFF8F0;
+      --text: #1a1a1a;
+    }
+
+    * { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar { background: #fff; border-bottom: 2px solid var(--red); }
+    .navbar-brand span { color: var(--red); font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; }
+    .nav-link { font-weight: 500; color: var(--text) !important; }
+    .nav-link:hover { color: var(--red) !important; }
+
+    /* ── HERO ── */
+    .hero-section {
+      min-height: 92vh;
+      background: linear-gradient(135deg, #fff 0%, var(--red-light) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(200,16,46,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-badge {
+      background: var(--red);
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 50px;
+      display: inline-block;
+    }
+    .hero-title { font-size: clamp(2.6rem, 6vw, 4.5rem); line-height: 1.1; }
+    .hero-title span { color: var(--red); }
+    .hero-drop {
+      font-size: 14rem;
+      line-height: 1;
+      opacity: .07;
+      position: absolute;
+      right: 2%;
+      top: 10%;
+      user-select: none;
+    }
+    .btn-donate {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      padding: .85rem 2.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 50px;
+      transition: background .25s, transform .2s;
+    }
+    .btn-donate:hover { background: var(--red-dark); transform: translateY(-2px); color: #fff; }
+    .btn-outline-red {
+      border: 2px solid var(--red);
+      color: var(--red);
+      padding: .8rem 2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 50px;
+      background: transparent;
+      transition: all .25s;
+    }
+    .btn-outline-red:hover { background: var(--red); color: #fff; }
+
+    /* ── STATS BAR ── */
+    .stats-bar { background: var(--red); color: #fff; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; }
+    .stat-divider { width: 1px; background: rgba(255,255,255,.3); }
+
+    /* ── SECTION TITLES ── */
+    .section-eyebrow {
+      color: var(--red);
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+
+    /* ── BLOOD TYPES ── */
+    .blood-type-card {
+      border: 2px solid #f0d8dc;
+      border-radius: 16px;
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+      background: #fff;
+    }
+    .blood-type-card:hover {
+      border-color: var(--red);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(200,16,46,.12);
+    }
+    .blood-type-card .type-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--red);
+    }
+    .urgency-badge {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-radius: 50px;
+      padding: .2rem .7rem;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .step-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-connector {
+      flex: 1; height: 2px;
+      background: repeating-linear-gradient(90deg, var(--red) 0 8px, transparent 8px 16px);
+      margin: 0 .5rem;
+    }
+
+    /* ── WHY DONATE ── */
+    .why-card {
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #f0d8dc;
+      transition: box-shadow .25s, transform .25s;
+    }
+    .why-card:hover { box-shadow: 0 10px 30px rgba(200,16,46,.1); transform: translateY(-4px); }
+    .why-icon {
+      width: 56px; height: 56px;
+      background: var(--red-light);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      color: var(--red);
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonial-card {
+      background: #fff;
+      border-radius: 20px;
+      border-left: 4px solid var(--red);
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    }
+    .quote-mark { font-size: 5rem; line-height: .6; color: var(--red); opacity: .2; font-family: serif; }
+
+    /* ── REGISTER FORM ── */
+    .form-section { background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%); }
+    .form-section .form-control, .form-section .form-select {
+      border-radius: 10px;
+      border: none;
+      padding: .75rem 1rem;
+    }
+    .form-section .form-control:focus, .form-section .form-select:focus {
+      box-shadow: 0 0 0 3px rgba(255,255,255,.35);
+    }
+    .btn-submit {
+      background: #fff;
+      color: var(--red);
+      border: none;
+      border-radius: 50px;
+      padding: .85rem 2.5rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: background .25s, transform .2s;
+    }
+    .btn-submit:hover { background: var(--cream); transform: translateY(-2px); }
+
+    /* ── FAQ ── */
+    .accordion-button:not(.collapsed) { background: var(--red-light); color: var(--red); font-weight: 600; }
+    .accordion-button:focus { box-shadow: none; }
+    .accordion-item { border: 1px solid #f0d8dc; border-radius: 12px !important; margin-bottom: .75rem; overflow: hidden; }
+
+    /* ── FOOTER ── */
+    footer { background: #0f0f0f; color: #ccc; }
+    footer a { color: #ccc; text-decoration: none; }
+    footer a:hover { color: var(--red); }
+    .footer-brand span { color: var(--red); }
+    .social-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .social-icon:hover { background: var(--red); }
+
+    /* ── EMERGENCY STRIP ── */
+    .emergency-strip {
+      background: #fff3cd;
+      border-top: 3px solid #ffc107;
+      font-size: .9rem;
+    }
+
+    /* ── SCROLL-UP ── */
+    #scrollUp {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      background: var(--red); color: #fff;
+      width: 46px; height: 46px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+      font-size: 1.3rem; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(200,16,46,.4);
+      transition: transform .2s;
+    }
+    #scrollUp:hover { transform: translateY(-3px); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ EMERGENCY STRIP ══════════ -->
+<div class="emergency-strip py-2 text-center">
+  <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+  <strong>Urgent need:</strong> O− and AB− blood types critically low. Call <strong>1800-XXX-XXXX</strong> now.
+</div>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <i class="bi bi-droplet-fill fs-4 text-danger"></i>
+      <span>LifeDrop</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link px-3" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link px-3" href="#blood-types">Blood Types</a></li>
+        <li class="nav-item"><a class="nav-link px-3" href="#how-it-works">How It Works</a></li>
+        <li class="nav-item"><a class="nav-link px-3" href="#faq">FAQ</a></li>
+        <li class="nav-item ms-lg-2">
+          <a class="btn btn-donate" href="#register">Donate Now</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero-section d-flex align-items-center" id="home">
+  <div class="hero-drop">🩸</div>
+  <div class="container py-5">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="hero-badge mb-3">Every Drop Counts</span>
+        <h1 class="hero-title mt-3 mb-4">
+          Your Blood Can<br>Save <span>3 Lives</span><br>Today.
+        </h1>
+        <p class="lead text-secondary mb-4" style="max-width:500px;">
+          One donation, three lives saved. Join thousands of heroes who give the gift of life every day. It's simple, safe, and free.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#register" class="btn btn-donate"><i class="bi bi-heart-fill me-2"></i>Register to Donate</a>
+          <a href="#how-it-works" class="btn btn-outline-red">How It Works</a>
+        </div>
+        <div class="d-flex align-items-center gap-4 mt-5">
+          <div class="d-flex">
+            <img src="https://i.pravatar.cc/40?img=1" class="rounded-circle border border-2 border-white" style="width:40px;height:40px;" alt="">
+            <img src="https://i.pravatar.cc/40?img=2" class="rounded-circle border border-2 border-white ms-n2" style="width:40px;height:40px;" alt="">
+            <img src="https://i.pravatar.cc/40?img=3" class="rounded-circle border border-2 border-white ms-n2" style="width:40px;height:40px;" alt="">
+          </div>
+          <p class="mb-0 text-secondary small"><strong class="text-dark">12,400+</strong> donors joined this month</p>
+        </div>
+      </div>
+      <div class="col-lg-5 text-center d-none d-lg-block">
+        <div class="position-relative d-inline-block">
+          <div class="bg-white rounded-4 shadow-lg p-4 text-start" style="max-width:320px;">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="why-icon"><i class="bi bi-droplet-half"></i></div>
+              <div>
+                <p class="mb-0 fw-bold">Last donation matched!</p>
+                <p class="mb-0 text-secondary small">Patient in ICU — Type A+</p>
+              </div>
+            </div>
+            <div class="progress" style="height:8px; border-radius:50px;">
+              <div class="progress-bar bg-danger" style="width:78%"></div>
+            </div>
+            <p class="text-secondary small mt-2 mb-0">78% of today's target reached</p>
+          </div>
+          <div class="bg-danger text-white rounded-3 shadow p-3 position-absolute" style="bottom:-30px;right:-20px;min-width:160px;">
+            <p class="mb-1 fw-bold"><i class="bi bi-geo-alt-fill me-1"></i>Nearest Camp</p>
+            <p class="mb-0 small">City Hospital — 1.2 km</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ STATS BAR ══════════ -->
+<section class="stats-bar py-4">
+  <div class="container">
+    <div class="row text-center align-items-center g-3">
+      <div class="col-6 col-md-3">
+        <div class="stat-num">1.2M+</div>
+        <div class="small opacity-75">Units Donated</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num">3.6M+</div>
+        <div class="small opacity-75">Lives Saved</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num">580+</div>
+        <div class="small opacity-75">Donation Camps</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num">98%</div>
+        <div class="small opacity-75">Donor Satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ABOUT ══════════ -->
+<section class="py-6 py-md-5" id="about" style="padding-top:5rem; padding-bottom:5rem;">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="section-eyebrow">About LifeDrop</span>
+        <h2 class="section-title mt-2 mb-4">We Connect Donors<br>With Those in Need</h2>
+        <p class="text-secondary mb-3">
+          LifeDrop is a voluntary blood donation initiative dedicated to building a self-sufficient blood supply across the country. We make donating as easy as possible — find a camp, register, and save a life.
+        </p>
+        <p class="text-secondary mb-4">
+          Every 2 seconds someone needs blood. Surgeries, cancer treatments, chronic illnesses, and traumatic injuries all rely on donated blood. There is no substitute — only human donors can help.
+        </p>
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill text-danger fs-5"></i>
+              <span class="fw-500">100% Voluntary</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill text-danger fs-5"></i>
+              <span class="fw-500">Medically Safe</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill text-danger fs-5"></i>
+              <span class="fw-500">Free of Cost</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill text-danger fs-5"></i>
+              <span class="fw-500">30-Min Process</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="bg-danger text-white rounded-4 p-4 h-100">
+              <i class="bi bi-heart-pulse fs-2 mb-3 d-block"></i>
+              <h5 class="fw-bold">Whole Blood</h5>
+              <p class="small opacity-75 mb-0">The most common donation type. Used in surgeries and emergencies.</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="bg-white rounded-4 p-4 h-100 shadow-sm border">
+              <i class="bi bi-droplet fs-2 mb-3 d-block text-danger"></i>
+              <h5 class="fw-bold">Plasma</h5>
+              <p class="small text-secondary mb-0">Liquid portion of blood used to treat burn and trauma patients.</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="bg-white rounded-4 p-4 h-100 shadow-sm border">
+              <i class="bi bi-capsule fs-2 mb-3 d-block text-danger"></i>
+              <h5 class="fw-bold">Platelets</h5>
+              <p class="small text-secondary mb-0">Critical for cancer patients undergoing chemotherapy.</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="bg-danger text-white rounded-4 p-4 h-100" style="background: var(--red-dark) !important;">
+              <i class="bi bi-activity fs-2 mb-3 d-block"></i>
+              <h5 class="fw-bold">Double Red Cells</h5>
+              <p class="small opacity-75 mb-0">For trauma and surgical patients needing red cell transfusions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ BLOOD TYPES ══════════ -->
+<section class="py-5" id="blood-types" style="background:#fff3f5;">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">Compatibility Guide</span>
+      <h2 class="section-title mt-2">Blood Type Inventory</h2>
+      <p class="text-secondary mx-auto" style="max-width:520px;">Know which blood types are in demand and who you can help with your donation.</p>
+    </div>
+    <div class="row g-4">
+      <!-- A+ -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">A+</div>
+          <p class="text-secondary small mb-2">Donate to: A+, AB+</p>
+          <p class="text-secondary small mb-3">Receive from: A+, A−, O+, O−</p>
+          <span class="urgency-badge bg-success text-white">Available</span>
+        </div>
+      </div>
+      <!-- A- -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">A−</div>
+          <p class="text-secondary small mb-2">Donate to: A+, A−, AB+, AB−</p>
+          <p class="text-secondary small mb-3">Receive from: A−, O−</p>
+          <span class="urgency-badge bg-warning text-dark">Low Stock</span>
+        </div>
+      </div>
+      <!-- B+ -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">B+</div>
+          <p class="text-secondary small mb-2">Donate to: B+, AB+</p>
+          <p class="text-secondary small mb-3">Receive from: B+, B−, O+, O−</p>
+          <span class="urgency-badge bg-success text-white">Available</span>
+        </div>
+      </div>
+      <!-- B- -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">B−</div>
+          <p class="text-secondary small mb-2">Donate to: B+, B−, AB+, AB−</p>
+          <p class="text-secondary small mb-3">Receive from: B−, O−</p>
+          <span class="urgency-badge bg-danger text-white">Urgent</span>
+        </div>
+      </div>
+      <!-- AB+ -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">AB+</div>
+          <p class="text-secondary small mb-2">Donate to: AB+</p>
+          <p class="text-secondary small mb-3">Receive from: All types</p>
+          <span class="urgency-badge bg-success text-white">Available</span>
+        </div>
+      </div>
+      <!-- AB- -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">AB−</div>
+          <p class="text-secondary small mb-2">Donate to: All types (plasma)</p>
+          <p class="text-secondary small mb-3">Receive from: A−, B−, AB−, O−</p>
+          <span class="urgency-badge bg-danger text-white">Urgent</span>
+        </div>
+      </div>
+      <!-- O+ -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">O+</div>
+          <p class="text-secondary small mb-2">Donate to: A+, B+, AB+, O+</p>
+          <p class="text-secondary small mb-3">Receive from: O+, O−</p>
+          <span class="urgency-badge bg-success text-white">Available</span>
+        </div>
+      </div>
+      <!-- O- -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="blood-type-card p-4 text-center h-100">
+          <div class="type-label">O−</div>
+          <p class="text-secondary small mb-2">Universal Donor 🌍</p>
+          <p class="text-secondary small mb-3">Receive from: O− only</p>
+          <span class="urgency-badge bg-danger text-white">Critical</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HOW IT WORKS ══════════ -->
+<section class="py-5" id="how-it-works">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">The Process</span>
+      <h2 class="section-title mt-2">How It Works</h2>
+      <p class="text-secondary mx-auto" style="max-width:500px;">Donating blood takes less than an hour and the steps are incredibly simple.</p>
+    </div>
+
+    <!-- Connector row desktop -->
+    <div class="d-none d-md-flex align-items-center justify-content-center mb-5 px-4">
+      <div class="step-circle">1</div>
+      <div class="step-connector"></div>
+      <div class="step-circle">2</div>
+      <div class="step-connector"></div>
+      <div class="step-circle">3</div>
+      <div class="step-connector"></div>
+      <div class="step-circle">4</div>
+    </div>
+
+    <div class="row g-4 text-center">
+      <div class="col-md-3">
+        <div class="why-card p-4 h-100">
+          <div class="why-icon mx-auto mb-3"><i class="bi bi-person-check"></i></div>
+          <span class="badge bg-danger mb-2">Step 1</span>
+          <h5 class="fw-bold">Register Online</h5>
+          <p class="text-secondary small mb-0">Fill out our quick registration form with your details and preferred donation date.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="why-card p-4 h-100">
+          <div class="why-icon mx-auto mb-3"><i class="bi bi-clipboard2-pulse"></i></div>
+          <span class="badge bg-danger mb-2">Step 2</span>
+          <h5 class="fw-bold">Health Screening</h5>
+          <p class="text-secondary small mb-0">A quick mini-physical: blood pressure, pulse, temperature, and hemoglobin check.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="why-card p-4 h-100">
+          <div class="why-icon mx-auto mb-3"><i class="bi bi-droplet-fill"></i></div>
+          <span class="badge bg-danger mb-2">Step 3</span>
+          <h5 class="fw-bold">Donate Blood</h5>
+          <p class="text-secondary small mb-0">The actual donation takes only 8–10 minutes. One pint of blood is collected safely.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="why-card p-4 h-100">
+          <div class="why-icon mx-auto mb-3"><i class="bi bi-cup-hot"></i></div>
+          <span class="badge bg-danger mb-2">Step 4</span>
+          <h5 class="fw-bold">Rest & Refresh</h5>
+          <p class="text-secondary small mb-0">Enjoy light snacks and drinks. Rest for 10–15 minutes and you're all set!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ WHY DONATE ══════════ -->
+<section class="py-5" style="background: linear-gradient(135deg, #fff 0%, var(--red-light) 100%);">
+  <div class="container py-4">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <span class="section-eyebrow">Benefits</span>
+        <h2 class="section-title mt-2 mb-4">Why Donate Blood?</h2>
+        <p class="text-secondary">Donating blood doesn't just save lives — it also has proven health benefits for the donor. Here's why you should consider becoming a regular donor.</p>
+        <a href="#register" class="btn btn-donate mt-3"><i class="bi bi-heart-fill me-2"></i>Become a Donor</a>
+      </div>
+      <div class="col-lg-7">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="why-card p-4 h-100">
+              <div class="why-icon mb-3"><i class="bi bi-heart-pulse-fill"></i></div>
+              <h6 class="fw-bold">Improves Heart Health</h6>
+              <p class="text-secondary small mb-0">Regular donation reduces iron levels, lowering the risk of heart disease.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="why-card p-4 h-100">
+              <div class="why-icon mb-3"><i class="bi bi-activity"></i></div>
+              <h6 class="fw-bold">Free Health Check</h6>
+              <p class="text-secondary small mb-0">You get a mini health screening every time you donate — pulse, BP, and more.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="why-card p-4 h-100">
+              <div class="why-icon mb-3"><i class="bi bi-stars"></i></div>
+              <h6 class="fw-bold">Burns Calories</h6>
+              <p class="text-secondary small mb-0">Donating one pint of blood burns up to 650 calories as your body replenishes it.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="why-card p-4 h-100">
+              <div class="why-icon mb-3"><i class="bi bi-emoji-smile-fill"></i></div>
+              <h6 class="fw-bold">Emotional Wellbeing</h6>
+              <p class="text-secondary small mb-0">Knowing you saved up to 3 lives gives a profound sense of purpose and joy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ELIGIBILITY ══════════ -->
+<section class="py-5 bg-white">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">Am I Eligible?</span>
+      <h2 class="section-title mt-2">Donation Eligibility Criteria</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <h5 class="fw-bold text-success mb-3"><i class="bi bi-check-circle-fill me-2"></i>You CAN donate if:</h5>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-check2 text-success me-2"></i>You are 18–65 years old</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-check2 text-success me-2"></i>You weigh at least 50 kg (110 lbs)</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-check2 text-success me-2"></i>You are in good general health</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-check2 text-success me-2"></i>Your hemoglobin level is ≥ 12.5 g/dL</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-check2 text-success me-2"></i>It's been 56+ days since your last donation</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h5 class="fw-bold text-danger mb-3"><i class="bi bi-x-circle-fill me-2"></i>You CANNOT donate if:</h5>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-x text-danger me-2"></i>You have a cold, flu, or fever today</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-x text-danger me-2"></i>You are pregnant or recently gave birth</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-x text-danger me-2"></i>You've had a tattoo/piercing in last 6 months</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-x text-danger me-2"></i>You are on certain medications (ask staff)</li>
+          <li class="list-group-item border-0 ps-0"><i class="bi bi-x text-danger me-2"></i>You have traveled to malaria-risk areas recently</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TESTIMONIALS ══════════ -->
+<section class="py-5" style="background:#fff3f5;">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">Stories</span>
+      <h2 class="section-title mt-2">Real People, Real Impact</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="testimonial-card p-4 h-100">
+          <div class="quote-mark">"</div>
+          <p class="text-secondary mt-2">My daughter needed emergency surgery. A stranger's donation saved her life. I now donate every 3 months in gratitude.</p>
+          <div class="d-flex align-items-center gap-3 mt-4">
+            <img src="https://i.pravatar.cc/48?img=10" class="rounded-circle" width="48" height="48" alt="">
+            <div>
+              <p class="mb-0 fw-bold">Priya Sharma</p>
+              <p class="mb-0 text-secondary small">Hyderabad</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testimonial-card p-4 h-100">
+          <div class="quote-mark">"</div>
+          <p class="text-secondary mt-2">I was nervous the first time but the staff made it so comfortable. Done in 40 minutes and I felt great after. It's now a habit!</p>
+          <div class="d-flex align-items-center gap-3 mt-4">
+            <img src="https://i.pravatar.cc/48?img=15" class="rounded-circle" width="48" height="48" alt="">
+            <div>
+              <p class="mb-0 fw-bold">Arjun Mehta</p>
+              <p class="mb-0 text-secondary small">Mumbai</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testimonial-card p-4 h-100">
+          <div class="quote-mark">"</div>
+          <p class="text-secondary mt-2">As a thalassemia patient who needed blood every month, I know firsthand how critical donors are. I encourage everyone to give.</p>
+          <div class="d-flex align-items-center gap-3 mt-4">
+            <img src="https://i.pravatar.cc/48?img=20" class="rounded-circle" width="48" height="48" alt="">
+            <div>
+              <p class="mb-0 fw-bold">Kavya Reddy</p>
+              <p class="mb-0 text-secondary small">Bengaluru</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ REGISTER FORM ══════════ -->
+<section class="form-section py-5" id="register">
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center text-white mb-5">
+        <span class="hero-badge mb-3" style="background:rgba(255,255,255,.2);">Register Now</span>
+        <h2 class="section-title mt-3" style="color:#fff;">Ready to Save a Life?</h2>
+        <p class="opacity-75">Fill in your details and we'll connect you with the nearest donation camp.</p>
+      </div>
+      <div class="col-lg-9">
+        <div class="bg-white rounded-4 p-4 p-md-5 shadow-lg">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-600">Full Name</label>
+              <input type="text" class="form-control" placeholder="Ravi Kumar">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600">Email Address</label>
+              <input type="email" class="form-control" placeholder="ravi@example.com">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600">Phone Number</label>
+              <input type="tel" class="form-control" placeholder="+91 98765 43210">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600">Date of Birth</label>
+              <input type="date" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600">Blood Type</label>
+              <select class="form-select">
+                <option value="">Select your blood type</option>
+                <option>A+</option><option>A−</option>
+                <option>B+</option><option>B−</option>
+                <option>AB+</option><option>AB−</option>
+                <option>O+</option><option>O−</option>
+                <option>Don't know</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600">City</label>
+              <input type="text" class="form-control" placeholder="Hyderabad">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-600">Preferred Donation Date</label>
+              <input type="date" class="form-control">
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="consent">
+                <label class="form-check-label text-secondary small" for="consent">
+                  I confirm I am in good health, weigh over 50 kg, and am between 18–65 years old. I agree to the health screening process.
+                </label>
+              </div>
+            </div>
+            <div class="col-12 text-center">
+              <button class="btn btn-donate px-5 py-3 fs-5" type="button">
+                <i class="bi bi-heart-fill me-2"></i>Register as Donor
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FAQ ══════════ -->
+<section class="py-5 bg-white" id="faq">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">FAQ</span>
+      <h2 class="section-title mt-2">Common Questions</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="accordion" id="faqAccordion">
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                Does donating blood hurt?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary">
+                You may feel a small pinch when the needle is inserted. Most donors say it's very mild and brief. The donation process itself is completely painless.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button fw-600 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                How often can I donate blood?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary">
+                Whole blood donors can donate every 56 days (about every 2 months). Platelet donors can donate more frequently — up to 24 times per year.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button fw-600 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Will I feel weak after donating?
+              </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary">
+                Most donors feel completely fine. Some may feel light-headed momentarily. Drinking plenty of water and eating a good meal before donation helps. We recommend avoiding heavy exercise the same day.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button fw-600 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                Is the equipment sterile and safe?
+              </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary">
+                Absolutely. All needles and collection bags are sterile, single-use, and disposed of after each donation. There is zero risk of contracting any disease from donating blood.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button fw-600 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                How long does the entire process take?
+              </button>
+            </h2>
+            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-secondary">
+                The full visit takes about 45–60 minutes: registration (10 min), screening (10 min), donation (10 min), and rest/refreshments (15 min).
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CTA BANNER ══════════ -->
+<section class="py-5" style="background: var(--red);">
+  <div class="container text-center text-white py-3">
+    <h2 class="section-title" style="color:#fff;">One Hour of Your Time.<br>Three Lifetimes of Impact.</h2>
+    <p class="opacity-75 mb-4 fs-5">Schedule your donation today. No appointment needed at walk-in camps.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="#register" class="btn btn-submit"><i class="bi bi-calendar-check me-2"></i>Book Appointment</a>
+      <a href="tel:1800XXXXXXX" class="btn btn-outline-light rounded-pill px-4">
+        <i class="bi bi-telephone-fill me-2"></i>Call Helpline
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="py-5">
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-lg-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-droplet-fill text-danger fs-4"></i>
+          <span class="fs-4 fw-bold text-white footer-brand"><span>Life</span>Drop</span>
+        </div>
+        <p class="text-secondary small">A voluntary blood donation initiative connecting donors with patients in need. Together, we keep the blood supply alive.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-icon text-white"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="social-icon text-white"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="social-icon text-white"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-icon text-white"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1">
+        <h6 class="text-white fw-bold mb-3">Quick Links</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#about">About Us</a></li>
+          <li class="mb-2"><a href="#how-it-works">How It Works</a></li>
+          <li class="mb-2"><a href="#blood-types">Blood Types</a></li>
+          <li class="mb-2"><a href="#register">Register</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h6 class="text-white fw-bold mb-3">Resources</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#">Find a Camp</a></li>
+          <li class="mb-2"><a href="#">Donor Stories</a></li>
+          <li class="mb-2"><a href="#">Eligibility Quiz</a></li>
+          <li class="mb-2"><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h6 class="text-white fw-bold mb-3">Contact Us</h6>
+        <p class="text-secondary small mb-2"><i class="bi bi-telephone me-2 text-danger"></i>1800-XXX-XXXX (Toll Free)</p>
+        <p class="text-secondary small mb-2"><i class="bi bi-envelope me-2 text-danger"></i>help@lifedrop.org</p>
+        <p class="text-secondary small mb-2"><i class="bi bi-clock me-2 text-danger"></i>Mon–Sat, 8AM – 8PM</p>
+        <p class="text-secondary small"><i class="bi bi-geo-alt me-2 text-danger"></i>Camps available across 50+ cities</p>
+      </div>
+    </div>
+    <hr style="border-color:rgba(255,255,255,.1);">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <p class="text-secondary small mb-0">© 2025 LifeDrop. All rights reserved.</p>
+      <p class="text-secondary small mb-0">Made with <i class="bi bi-heart-fill text-danger"></i> for humanity</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll to top -->
+<div id="scrollUp" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="bi bi-arrow-up"></i>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Scroll-up button
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('scrollUp');
+    btn.style.display = window.scrollY > 400 ? 'flex' : 'none';
+  });
+</script>
+</body>
+</html>
